@@ -31,8 +31,6 @@ export async function generatePaidNewsletter(): Promise<void> {
   console.log('═'.repeat(60));
   console.log('');
 
-  console.log('🧪 TABLE TEST FORCÉE - Modifier supabase.ts pour passer en prod');
-  console.log('');
 
   try {
     // =========================================
@@ -105,7 +103,7 @@ export async function generatePaidNewsletter(): Promise<void> {
     // Step 7: Notify via Telegram
     // =========================================
     console.log('📱 Step 6: Sending Telegram notification...');
-    const telegramMessage = `📰 Paid Newsletter Sent! 🧪 TEST
+    const telegramMessage = `📰 Paid Newsletter Sent! 🏆
 
 📌 ${title}
 

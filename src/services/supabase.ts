@@ -73,13 +73,11 @@ export async function getLatestNiches(limit: number = 2): Promise<Niche[]> {
 
 /**
  * Get active paid subscribers
- * ⚠️ FORCÉ SUR TABLE TEST - Changer quand prêt pour prod
  */
 export async function getActivePaidSubscribers(): Promise<PaidSubscriber[]> {
-  // ⚠️ FORCÉ SUR TABLE TEST UNIQUEMENT
-  const tableName = 'paid_newsletter_subscribers_test';
+  const tableName = 'paid_newsletter_subscribers';
   
-  console.log(`   📋 Using table: ${tableName} (🧪 TEST MODE FORCÉ)`);
+  console.log(`   📋 Using table: ${tableName}`);
   
   const { data, error } = await getSupabase()
     .from(tableName)
