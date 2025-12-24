@@ -14,7 +14,7 @@ function getResendClient(): Resend {
   return resend;
 }
 
-const FROM_EMAIL = process.env.EMAIL_FROM || 'support@arianeconcept.fr';
+const FROM_EMAIL = process.env.EMAIL_FROM || 'Niches Hunter <support@arianeconcept.fr>';
 
 /**
  * Helper function to delay execution

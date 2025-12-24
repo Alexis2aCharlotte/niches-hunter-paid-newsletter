@@ -46,7 +46,7 @@ OPENAI_API_KEY=sk-xxx
 
 # Email (Resend)
 RESEND_API_KEY=xxx
-EMAIL_FROM=support@arianeconcept.fr
+EMAIL_FROM=Niches Hunter <support@arianeconcept.fr>
 
 # Telegram (optionnel)
 TELEGRAM_BOT_TOKEN=xxx
