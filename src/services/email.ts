@@ -17,7 +17,15 @@ function getResendClient(): Resend {
 const FROM_EMAIL = process.env.EMAIL_FROM || 'support@arianeconcept.fr';
 
 /**
- * Send paid newsletter to multiple subscribers (batch)
+ * Helper function to delay execution
+ */
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Send paid newsletter to multiple subscribers (sequential to respect rate limits)
+ * Resend allows only 2 requests per second, so we send 1 email every 600ms to be safe
  */
 export async function sendPaidNewsletterBatch(
   emails: string[], 
@@ -29,34 +37,33 @@ export async function sendPaidNewsletterBatch(
   let success = 0;
   let failed = 0;
 
-  // Send in batches of 10 to avoid rate limits
-  const batchSize = 10;
-  for (let i = 0; i < emails.length; i += batchSize) {
-    const batch = emails.slice(i, i + batchSize);
-    
-    const promises = batch.map(async (email) => {
-      try {
-        await getResendClient().emails.send({
-          from: FROM_EMAIL,
-          to: email,
-          subject: subject,
-          html: htmlContent
-        });
-        success++;
-      } catch (err) {
-        console.error(`Failed to send to ${email}:`, err);
-        failed++;
-      }
-    });
+  console.log(`📧 Sending newsletter to ${emails.length} subscribers (sequential, 600ms delay)...`);
 
-    await Promise.all(promises);
+  // Send emails one by one with delay to respect Resend rate limit (2 req/sec)
+  for (let i = 0; i < emails.length; i++) {
+    const email = emails[i];
     
-    // Small delay between batches
-    if (i + batchSize < emails.length) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      await getResendClient().emails.send({
+        from: FROM_EMAIL,
+        to: email,
+        subject: subject,
+        html: htmlContent
+      });
+      success++;
+      console.log(`✅ [${i + 1}/${emails.length}] Sent to ${email}`);
+    } catch (err: any) {
+      console.error(`❌ [${i + 1}/${emails.length}] Failed to send to ${email}:`, err?.message || err);
+      failed++;
+    }
+
+    // Wait 600ms between each email to stay under 2 requests/second limit
+    if (i < emails.length - 1) {
+      await delay(600);
     }
   }
 
+  console.log(`📊 Newsletter sent: ${success} success, ${failed} failed`);
   return { success, failed };
 }
 
