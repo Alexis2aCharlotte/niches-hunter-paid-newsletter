@@ -49,6 +49,7 @@ export interface PaidSubscriber {
   customer_id: string;
   is_active: boolean;
   plan_type: string;
+  newsletter_opted_out: boolean;
 }
 
 /**
@@ -82,7 +83,8 @@ export async function getActivePaidSubscribers(): Promise<PaidSubscriber[]> {
   const { data, error } = await getSupabase()
     .from(tableName)
     .select('*')
-    .eq('is_active', true);
+    .eq('is_active', true)
+    .eq('newsletter_opted_out', false);
 
   if (error) {
     console.error('Error fetching paid subscribers:', error);

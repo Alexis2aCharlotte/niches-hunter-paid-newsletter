@@ -15,6 +15,7 @@ function getResendClient(): Resend {
 }
 
 const FROM_EMAIL = process.env.EMAIL_FROM || 'Niches Hunter <support@arianeconcept.fr>';
+const SITE_URL = process.env.SITE_URL || 'https://nicheshunter.app';
 
 /**
  * Helper function to delay execution
@@ -43,12 +44,16 @@ export async function sendPaidNewsletterBatch(
   for (let i = 0; i < emails.length; i++) {
     const email = emails[i];
     
+    // Personalize unsubscribe URL for each subscriber
+    const unsubscribeUrl = `${SITE_URL}/unsubscribe-pro?email=${encodeURIComponent(email)}`;
+    const personalizedHtml = htmlContent.replace(/\{\{UNSUBSCRIBE_URL\}\}/g, unsubscribeUrl);
+    
     try {
       await getResendClient().emails.send({
         from: FROM_EMAIL,
         to: email,
         subject: subject,
-        html: htmlContent
+        html: personalizedHtml
       });
       success++;
       console.log(`✅ [${i + 1}/${emails.length}] Sent to ${email}`);

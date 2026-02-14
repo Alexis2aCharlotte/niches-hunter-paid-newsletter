@@ -237,6 +237,9 @@ export function generatePaidNewsletterHTML(niches: NicheSummary[], title: string
               <p style="margin:12px 0 0;font-size:11px;color:#999;">
                 You're receiving this because you're a Niches Hunter Pro member.
               </p>
+              <p style="margin:8px 0 0;">
+                <a href="{{UNSUBSCRIBE_URL}}" style="color:#999;text-decoration:underline;font-size:11px;">Unsubscribe from emails</a>
+              </p>
             </td>
           </tr>
 
